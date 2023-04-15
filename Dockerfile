@@ -2,14 +2,12 @@
 FROM php:7.4-apache
 
 # Install required packages
-RUN apt-get update --no-cache && \
-    apt-get install -y --no-install-recommends \
-        git \
+RUN apt-get update \ 
+    && apt-get install -y \
         libzip-dev \
+        zip \
         unzip \
-        && docker-php-ext-install zip \
-        && pecl install xdebug \
-        && docker-php-ext-enable xdebug
+        git
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql \
@@ -26,8 +24,9 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install composer and the project dependencies
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-dev --prefer-dist --optimize-autoloader
+RUN curl -sS https://getcomposer.org/installer
+RUN php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install --no-dev --prefer-dist --optimize-autoloader
 
 # Set the ownership and permissions of the project files
 RUN chown -R www-data:www-data /var/www/html \
