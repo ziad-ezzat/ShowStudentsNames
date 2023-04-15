@@ -2,7 +2,7 @@
 FROM php:7.4-apache
 
 # Install required packages
-RUN apt-get update \
+RUN apt-get update --no-cache\ 
     && apt-get install -y \
         libzip-dev \
         zip \
