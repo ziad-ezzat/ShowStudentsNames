@@ -2,12 +2,14 @@
 FROM php:7.4-apache
 
 # Install required packages
-RUN apt-get update --no-cache\ 
-    && apt-get install -y \
+RUN apt-get update --no-cache && \
+    apt-get install -y --no-install-recommends \
+        git \
         libzip-dev \
-        zip \
         unzip \
-        git
+        && docker-php-ext-install zip \
+        && pecl install xdebug \
+        && docker-php-ext-enable xdebug
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql \
