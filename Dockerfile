@@ -24,8 +24,12 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install composer and the project dependencies
-RUN curl -sS https://getcomposer.org/installer
-RUN php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Add composer to PATH
+ENV PATH="/usr/local/bin:${PATH}"
+
+# Install project dependencies
 RUN composer install --no-dev --prefer-dist --optimize-autoloader
 
 # Set the ownership and permissions of the project files
